@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TORO · Archivio Granata</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Nunito,sans-serif;color:#fff;background:linear-gradient(160deg,#3b0a12,#5c0f1e 50%,#2a060c) fixed}
+header{text-align:center;padding:40px 16px 20px}
+h1{font-family:Bangers,cursive;font-size:clamp(90px,22vw,240px);margin:0;letter-spacing:8px;color:#fff;text-shadow:6px 6px 0 #8b1a2b,12px 12px 0 #000;-webkit-text-stroke:3px #000;line-height:1}
+.bull{font-size:clamp(60px,12vw,120px);display:inline-block;animation:b 2s infinite ease-in-out}@keyframes b{50%{transform:translateY(-10px) rotate(-6deg)}}
+.sub{font-family:Bangers;font-size:clamp(22px,4vw,36px);letter-spacing:2px;color:#f4c9d0}
+nav{position:sticky;top:0;z-index:5;background:#2a060cee;backdrop-filter:blur(6px);display:flex;gap:8px;overflow-x:auto;padding:10px;border-bottom:4px solid #000}
+nav a{flex:none;font-family:Bangers;font-size:20px;letter-spacing:1px;color:#fff;text-decoration:none;background:#8b1a2b;border:3px solid #000;border-radius:14px;padding:6px 14px;box-shadow:3px 3px 0 #000}
+nav a:hover{background:#b02a40;transform:translateY(-2px)}
+main{max-width:1300px;margin:auto;padding:16px}
+section{scroll-margin-top:70px;margin:40px 0}
+h2{font-family:Bangers;font-size:clamp(32px,5vw,52px);letter-spacing:2px;margin:0 0 16px;text-shadow:3px 3px 0 #000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.card{background:#fff;color:#2a060c;border:4px solid #000;border-radius:20px;overflow:hidden;box-shadow:6px 6px 0 #000;cursor:pointer;transition:.15s}
+.card:hover{transform:translate(-3px,-3px) rotate(-1deg);box-shadow:10px 10px 0 #000}
+.th{position:relative;aspect-ratio:16/9;background:#000}.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th:after{content:"▶";position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;background:#8b1a2bdd;border:3px solid #fff;display:grid;place-items:center;font-size:28px;color:#fff}
+.card p{margin:0;padding:12px 14px;font-weight:800;font-size:15px}
+#lb{position:fixed;inset:0;background:#000d;display:none;place-items:center;z-index:9}#lb.on{display:grid}
+#lb iframe{width:min(92vw,1100px);aspect-ratio:16/9;border:4px solid #fff;border-radius:14px}
+#lb a{position:absolute;top:14px;right:20px;color:#fff;font-family:Bangers;font-size:36px;cursor:pointer;text-decoration:none}
+footer{text-align:center;padding:30px;opacity:.7}
+details{margin:10px 0}summary{cursor:pointer;list-style:none;font-family:Bangers;letter-spacing:1px}summary::-webkit-details-marker{display:none}
+summary:before{content:"▸ ";}details[open]>summary:before{content:"▾ "}
+.dec>summary{font-size:clamp(30px,5vw,50px);text-shadow:3px 3px 0 #000}
+.sta{background:#ffffff10;border:3px solid #000;border-radius:16px;padding:6px 14px}.sta>summary{font-size:28px;color:#ffd6dd}
+.tipo>summary{font-size:22px}.badge{display:inline-block;background:#8b1a2b;color:#fff;border-radius:8px;padding:1px 7px;font-size:12px;margin:0 4px 0 0}
+.dur{position:absolute;right:8px;bottom:8px;background:#000c;color:#fff;font-size:13px;padding:2px 6px;border-radius:6px;z-index:1}
+</style></head><body>
+<header><div class="bull">🐂</div><h1>TORO</h1><div class="sub">Archivio video granata · dal Grande Torino a oggi</div></header>
+<nav id="nav"></nav><main id="main"></main>
+<div id="lb"><a onclick="chiudi()">✕</a><iframe id="fr" allow="autoplay;fullscreen" allowfullscreen></iframe></div>
+<footer>Forza Toro! 🟥 Video ospitati su YouTube.</footer>
+<script src="videos.js"></script>
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const card=v=>`<div class="card" onclick="apri('${v.id}')"><div class="th"><img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt=""><span class="dur">${v.durata}</span></div><p>${v.giornata?`<span class="badge">${v.giornata}ª giornata</span>`:''}${v.competizione?`<span class="badge">${esc(v.competizione)}</span>`:''}${v.risultato?`<span class="badge">${esc(v.risultato)}</span>`:''}<br>${esc(v.titolo)}</p></div>`;
+const tipo=(n,l)=>l.length?`<details class="tipo" open><summary>${n} (${l.length})</summary><div class="grid">${l.map(card).join('')}</div></details>`:'';
+ARCHIVIO.forEach((c,i)=>{nav.innerHTML+=`<a href="#${c.id}" onclick="document.getElementById('${c.id}').open=true">${c.nome.split(' · ')[0]}</a>`;
+main.innerHTML+=`<section><details class="dec" id="${c.id}" ${i==0?'open':''}><summary>${c.nome}</summary>${c.stagioni.map((s,j)=>`<details class="sta" ${j==0?'open':''}><summary>Stagione ${s.stagione}</summary>${tipo('⚽ Partite',s.partite)}${tipo('📺 Servizi',s.servizi)}</details>`).join('')}</details></section>`});
+function apri(id){fr.src=`https://www.youtube.com/embed/${id}?autoplay=1`;lb.classList.add('on')}
+function chiudi(){fr.src='';lb.classList.remove('on')}
+lb.onclick=e=>{if(e.target==lb)chiudi()};onkeydown=e=>{if(e.key=='Escape')chiudi()};
+</script></body></html>
